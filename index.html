@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo: Log In</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">
+      <img class="logo-image" src="https://www.image2url.com/r2/default/images/1789342129628-3e17b341-a6de-4714-a804-de37e681da53.jpeg" alt="Exchange logo">
+      <span class="brand-name">Demo</span>
+    </div>
+    <a href="#" class="signup" id="signupButton">Sign Up</a>
+  </header>
+
+  <main class="wrapper">
+    <section id="loginScreen" class="screen">
+      <button type="button" class="back" id="loginBack">← Back</button>
+      <h1>Log In</h1>
+
+      <div class="tabs">
+        <button type="button" id="emailPhoneTab" class="tab active">Email/Phone Number</button>
+        <button type="button" id="subAccountTab" class="tab">Sub Account</button>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div id="emailPhoneFields">
+          <div class="form-group">
+            <label for="identifier">Email/Phone Number</label>
+            <input id="identifier" type="text" autocomplete="username" placeholder="Email or phone number(country code)" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Login Password</label>
+            <div class="input-wrap">
+              <input id="loginPassword" class="password-input" type="password" autocomplete="current-password" placeholder="Enter password" required>
+              <button type="button" class="toggle-password" data-target="loginPassword">Show</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="subAccountFields" class="hidden">
+          <div class="form-group">
+            <label for="subAccount">Sub Account</label>
+            <input id="subAccount" type="text" autocomplete="username" placeholder="Enter sub account" disabled>
+          </div>
+          <div class="form-group">
+            <label for="subAccountPassword">Sub account login password</label>
+            <div class="input-wrap">
+              <input id="subAccountPassword" class="password-input" type="password" autocomplete="current-password" placeholder="Enter password" disabled>
+              <button type="button" class="toggle-password" data-target="subAccountPassword">Show</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="remember">
+            <input type="checkbox" id="rememberMe"> Remember me
+          </label>
+          <a href="#" class="forgot" id="forgotPassword">Forgot password?</a>
+        </div>
+
+        <div id="loginError" class="error"></div>
+        <button type="submit" class="primary" id="loginButton">Next</button>
+      </form>
+
+      <div class="divider">OR CONTINUE WITH</div>
+      <button type="button" class="secondary" id="passkeyButton">Log In with Passkey</button>
+      <div class="social-row">
+        <button type="button" class="social" id="googleButton">Google</button>
+        <button type="button" class="social" id="appleButton">Apple</button>
+      </div>
+      <div class="notice">Demo 2026</div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
