@@ -396,17 +396,6 @@
     const emailPhoneFields = document.getElementById("emailPhoneFields");
     const subAccountFields = document.getElementById("subAccountFields");
     const identifier = document.getElementById("identifier");
-    const identifierError = document.getElementById("identifierError");
-
-function isValidEmail(value) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function isValidPhone(value) {
-  return /^\+?[0-9\s()-]{1,14}$/.test(value);
-}
-
-
     const subAccount = document.getElementById("subAccount");
     const loginPassword = document.getElementById("loginPassword");
     const subAccountPassword = document.getElementById("subAccountPassword");
@@ -473,7 +462,7 @@ loginForm.addEventListener("submit", async (e) => {
     const value = identifier.value.trim();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^\+?[0-9\s()-]{1,14}$/;
+    const phoneRegex = /^\+?[0-9]{1,14}$/;
 
     if (value.includes("@")) {
       if (!emailRegex.test(value)) {
