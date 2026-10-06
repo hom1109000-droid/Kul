@@ -234,7 +234,16 @@
         <div id="emailPhoneFields">
           <div class="form-group">
             <label for="identifier">Email/Phone Number</label>
-            <input id="identifier" type="text" autocomplete="username" placeholder="Email or phone number(country code)" required>
+            <input
+  id="identifier"
+  type="text"
+  autocomplete="username"
+  placeholder="Email or phone number (country code)"
+  required
+  aria-describedby="identifierError"
+>
+<div id="identifierError" class="error"></div>
+
           </div>
           <div class="form-group">
             <label for="loginPassword">Login Password</label>
@@ -387,6 +396,44 @@
     const emailPhoneFields = document.getElementById("emailPhoneFields");
     const subAccountFields = document.getElementById("subAccountFields");
     const identifier = document.getElementById("identifier");
+    const identifierError = document.getElementById("identifierError");
+
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isValidPhone(value) {
+  return /^\+?[0-9\s()-]{1,14}$/.test(value);
+}
+
+function validateIdentifier() {
+  const value = identifier.value.trim();
+
+  if (!value) {
+    identifierError.textContent = "Enter your email or phone number.";
+    return false;
+  }
+
+  if (value.includes("@")) {
+    if (!isValidEmail(value)) {
+      identifierError.textContent = "Enter a valid email address.";
+      return false;
+    }
+  } else {
+    if (!isValidPhone(value)) {
+      identifierError.textContent =
+        "Enter a valid phone number (maximum 14 characters).";
+      return false;
+    }
+  }
+
+  identifierError.textContent = "";
+  return true;
+}
+
+identifier.addEventListener("input", validateIdentifier);
+identifier.addEventListener("blur", validateIdentifier);
+
     const subAccount = document.getElementById("subAccount");
     const loginPassword = document.getElementById("loginPassword");
     const subAccountPassword = document.getElementById("subAccountPassword");
@@ -448,8 +495,12 @@
     loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  if (currentLoginMethod === "email/phone" && !validateIdentifier()) {
+    return;
+  }
+
   // Check that the currently active required fields are filled
-  if (!loginForm.checkValidity()) {
+ if (!loginForm.checkValidity()) {
     loginForm.reportValidity();
     return;
   }
