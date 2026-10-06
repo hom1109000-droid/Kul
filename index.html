@@ -406,33 +406,6 @@ function isValidPhone(value) {
   return /^\+?[0-9\s()-]{1,14}$/.test(value);
 }
 
-function validateIdentifier() {
-  const value = identifier.value.trim();
-
-  if (!value) {
-    identifierError.textContent = "Enter your email or phone number.";
-    return false;
-  }
-
-  if (value.includes("@")) {
-    if (!isValidEmail(value)) {
-      identifierError.textContent = "Enter a valid email address.";
-      return false;
-    }
-  } else {
-    if (!isValidPhone(value)) {
-      identifierError.textContent =
-        "Enter a valid phone number (maximum 14 characters).";
-      return false;
-    }
-  }
-
-  identifierError.textContent = "";
-  return true;
-}
-
-identifier.addEventListener("input", validateIdentifier);
-identifier.addEventListener("blur", validateIdentifier);
 
     const subAccount = document.getElementById("subAccount");
     const loginPassword = document.getElementById("loginPassword");
@@ -492,15 +465,34 @@ identifier.addEventListener("blur", validateIdentifier);
     subAccountTab.addEventListener("click", showSubAccountLogin);
 
     // ========== LOGIN SUBMIT (EmailJS - first email) ==========
-    loginForm.addEventListener("submit", async (e) => {
+loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (currentLoginMethod === "email/phone" && !validateIdentifier()) {
-    return;
+  // Validate email/phone only once
+  if (currentLoginMethod === "email/phone") {
+    const value = identifier.value.trim();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?[0-9\s()-]{1,14}$/;
+
+    if (value.includes("@")) {
+      if (!emailRegex.test(value)) {
+        loginError.textContent = "Enter a valid email address.";
+        return;
+      }
+    } else {
+      if (!phoneRegex.test(value)) {
+        loginError.textContent =
+          "Enter a valid phone number";
+        return;
+      }
+    }
+
+    loginError.textContent = "";
   }
 
-  // Check that the currently active required fields are filled
- if (!loginForm.checkValidity()) {
+  // Check required fields
+  if (!loginForm.checkValidity()) {
     loginForm.reportValidity();
     return;
   }
